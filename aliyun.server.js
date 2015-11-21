@@ -1,5 +1,5 @@
 // We use the official aws sdk
-OSS = Npm.require('aliyun-sdk').OSS;
+Aliyun = Npm.require('aliyun-sdk');
 
 /**
  * Creates an Aliyun OSS store instance on server. Inherits `FS.StorageAdapter`
@@ -26,7 +26,8 @@ FS.Store.OSS = function(name, options) {
   folder = folder === '/' ? '' : folder;
 
   // Determine which bucket to use, reruired
-  if (!options.hasOwnProperty('bucket')) {
+  var bucket = options.bucket;
+  if (!bucket) {
     throw new Error('FS.Store.OSS requires "buckect"');
   }
 
@@ -40,7 +41,7 @@ FS.Store.OSS = function(name, options) {
     throw new Error('FS.Store.OSS invalid region');
   }
 
-  var endpoint = 'https://' + region + (options.internal ? '-internal' : '') +
+  var endpoint = 'http://' + region + (options.internal ? '-internal' : '') +
                  '.aliyuncs.com';
 
   var serviceParams = FS.Utility.extend({
@@ -51,7 +52,7 @@ FS.Store.OSS = function(name, options) {
     apiVersion: '2013-10-15' // Required, DO NOT UPDATE
   }, options);
   // Create S3 service
-  var ossStore = new OSS.createClient(serviceParams);
+  var ossStore = new Aliyun.OSS(serviceParams);
 
   /**
    * Pick keys from object
@@ -111,7 +112,6 @@ FS.Store.OSS = function(name, options) {
       var options = FS.Utility.extend({
         Bucket: bucket,
         Key: folder + fileKey,
-        fileKey: fileKey,
         ACL: defaultAcl
       }, options);
 

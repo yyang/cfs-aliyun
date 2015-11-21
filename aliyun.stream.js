@@ -6,7 +6,7 @@ var stream = Npm.require('stream');
  * @param  {[type]} option [description]
  * @return {[type]}        [description]
  */
-OSS.prototype.createReadStream = function(params, option) {
+Aliyun.OSS.prototype.createReadStream = function(params, option) {
   return this.getObject(params).createReadStream();
 };
 
@@ -17,7 +17,7 @@ OSS.prototype.createReadStream = function(params, option) {
  * @param  {Object} option CollectionFS Options
  * @return {Stream}        writeStream object
  */
-OSS.prototype.createPutStream = function(params, option) {
+Aliyun.OSS.prototype.createWriteStream = function(params, option) {
   var self = this;
 
   // Scope variables
@@ -54,7 +54,7 @@ OSS.prototype.createPutStream = function(params, option) {
 
     // While the current chunk is larger than chunkSizeThreashold, we flush
     // the chunk buffer to OSS via multipart upload.
-    if (curentChunk.length > chunkSizeThreashold) {
+    if (currentChunk.length > chunkSizeThreashold) {
       // Upload when necessary;
       runWhenReady(function() { flushChunk(next, false); });
     } else {
@@ -86,6 +86,7 @@ OSS.prototype.createPutStream = function(params, option) {
     currentChunk.copy(uploadingChunk); // copies to target
 
     var localChunkNumber = chunkNumber++;
+    receivedSize += uploadingChunk.length;
 
     self.uploadPart({
       Body: uploadingChunk,
