@@ -7,79 +7,8 @@ var stream = Npm.require('stream');
  * @return {[type]}        [description]
  */
 OSS.prototype.createReadStream = function(params, option) {
-  var streams = AWS.util.nodeRequire('stream');
-  var req = this;
-  var stream = null;
-
-  if (AWS.HttpClient.streamsApiVersion === 2) {
-    stream = new streams.PassThrough();
-    req.send();
-  } else {
-    stream = new streams.Stream();
-    stream.readable = true;
-
-    stream.sent = false;
-    stream.on('newListener', function(event) {
-      if (!stream.sent && event === 'data') {
-        stream.sent = true;
-        process.nextTick(function() { req.send(); });
-      }
-    });
-  }
-
-  this.on('httpHeaders', function streamHeaders(statusCode, headers, resp) {
-    if (statusCode < 300) {
-      req.removeListener('httpData', AWS.EventListeners.Core.HTTP_DATA);
-      req.removeListener('httpError', AWS.EventListeners.Core.HTTP_ERROR);
-      req.on('httpError', function streamHttpError(error) {
-        resp.error = error;
-        resp.error.retryable = false;
-      });
-
-      var httpStream = resp.httpResponse.createUnbufferedStream();
-      if (AWS.HttpClient.streamsApiVersion === 2) {
-        httpStream.pipe(stream);
-      } else {
-        httpStream.on('data', function(arg) {
-          stream.emit('data', arg);
-        });
-        httpStream.on('end', function() {
-          stream.emit('end');
-        });
-      }
-
-      httpStream.on('error', function(err) {
-        stream.emit('error', err);
-      });
-    }
-  });
-
-  this.on('error', function(err) {
-    stream.emit('error', err);
-  });
-
-  return stream;
-
+  return this.getObject(params).createReadStream();
 };
-
-//"ACL":'lcation": "header","name": "x-oss-acl"}
-//"Bucket": {"required": true,"location": "uri"}
-//"CacheControl": {"location": "header","name": "Cache-Control"}
-//"ContentDisposition": {"location": "header","name": "Content-Disposition"}
-//"ContentEncoding": {"location": "header","name": "Content-Encoding"}
-//"ContentLanguage": {"location": "header","name": "Content-Language"}
-//"ContentType": {"location": "header","name": "Content-Type"}
-//"Expires": {"type": "timestamp","location": "header","name": "Expires"}
-//"GrantFullControl": {"location": "header","name": "x-oss-grant-full-control"}
-//"GrantRead": {"location": "header","name": "x-oss-grant-read"}
-//"GrantReadACP": {"location": "header","name": "x-oss-grant-read-acp"}
-//"GrantWriteACP": {"location": "header","name": "x-oss-grant-write-acp"}
-//"Key": {"required": true,"location": "uri"}
-//"Metadata": {"type": "map","location": "header","name": "x-oss-meta-","members": {},"keys": {}}
-//"ServerSideEncryption": {"location": "header","name": "x-oss-server-side-encryption"}
-//"StorageClass": {"location": "header","name": "x-oss-storage-class"}
-//"WebsiteRedirectLocation": {"location": "header","name": "x-oss-website-redirect-location"}
-
 
 /**
  * Creates get put stream, inspired by github.com/meteormatt:
@@ -270,4 +199,3 @@ OSS.prototype.createPutStream = function(params, option) {
 
   return writeStream;
 };
-

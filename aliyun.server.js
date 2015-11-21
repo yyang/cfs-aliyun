@@ -1,18 +1,6 @@
 // We use the official aws sdk
 OSS = Npm.require('aliyun-sdk').OSS;
 
-function pick(obj, keys) {
-  var result = {}, iteratee = keys[0];
-  if (obj == null || arguments.length < 2) return result;
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-    if (obj.hasOwnProperty(key)) {
-      result[key] = obj[key];
-    }
-  }
-  return result;
-}
-
 /**
  * Creates an Aliyun OSS store instance on server. Inherits `FS.StorageAdapter`
  * type.
@@ -25,8 +13,9 @@ function pick(obj, keys) {
  */
 FS.Store.OSS = function(name, options) {
   var self = this;
-  if (!(self instanceof FS.Store.OSS))
+  if (!(self instanceof FS.Store.OSS)) {
     throw new Error('FS.Store.OSS missing keyword "new"');
+  }
 
   options = options || {};
 
@@ -34,24 +23,53 @@ FS.Store.OSS = function(name, options) {
   var folder = options.folder;
   folder = typeof folder === 'string' && folder.length ?
            folder.replace(/^\//, '').replace(/\/?$/, '/') : '';
+  folder = folder === '/' ? '' : folder;
 
   // Determine which bucket to use, reruired
   if (!options.hasOwnProperty('bucket')) {
     throw new Error('FS.Store.OSS requires "buckect"');
   }
 
-  // var defaultAcl = options.ACL || 'private';
+  // Those ACL values are allowed: 'private', 'public-read', 'public-read-write'
+  var defaultAcl = options.ACL || 'private';
+
+  var region = options.region || 'oss-cn-hangzhou';
+  var regionList = ['oss-cn-hangzhou', 'oss-cn-beijing', 'oss-cn-qingdao',
+                    'oss-cn-shenzhen', 'oss-cn-hongkong'];
+  if (regionList.indexOf(region) === -1) {
+    throw new Error('FS.Store.OSS invalid region');
+  }
+
+  var endpoint = 'https://' + region + (options.internal ? '-internal' : '') +
+                 '.aliyuncs.com';
 
   var serviceParams = FS.Utility.extend({
     accessKeyId: null, // Required
-    accessKeySecret: null, // Required
-    bucket: null, // Required
-    region: 'oss-cn-hangzhou',
-    internal: false,
-    timeout: 60000
+    secretAccessKey: null, // Required
+    endpoint: endpoint,
+    timeout: 60000,
+    apiVersion: '2013-10-15' // Required, DO NOT UPDATE
   }, options);
   // Create S3 service
   var ossStore = new OSS.createClient(serviceParams);
+
+  /**
+   * Pick keys from object
+   * @param  {Object} obj  Original object
+   * @param  {Array}  keys Array of keys to be preserved
+   * @return {Object}      New object
+   */
+  function pick(obj, keys) {
+    var result = {}, iteratee = keys[0];
+    if (obj == null || arguments.length < 2) return result;
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      if (obj.hasOwnProperty(key)) {
+        result[key] = obj[key];
+      }
+    }
+    return result;
+  }
 
   return new FS.StorageAdapter(name, options, {
     typeName: 'storage.oss',
@@ -69,10 +87,11 @@ FS.Store.OSS = function(name, options) {
              fileObj._id + '-' + (filenameInStore || filename);
     },
 
-    // Bucket, Key,
     createReadStream: function(fileKey, options) {
-      var readOptions = pick(options, ['timeout', 'headers']);
-      return ossStore.getStream(fileKey, readOptions);
+      return ossStore.createReadStream({
+        Bucket: bucket,
+        Key: folder + fileKey
+      }, options);
     },
     // Comment to documentation: Set options.ContentLength otherwise the
     // indirect stream will be used creating extra overhead on the filesystem.
@@ -99,8 +118,7 @@ FS.Store.OSS = function(name, options) {
       return ossStore.createWriteStream(options);
     },
     remove: function(fileKey, callback) {
-
-      S3.deleteObject({
+      ossStore.deleteObject({
         Bucket: bucket,
         Key: folder + fileKey
       }, function(error) {
