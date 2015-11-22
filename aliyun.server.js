@@ -91,7 +91,7 @@ FS.Store.OSS = function(name, options) {
     createReadStream: function(fileKey, options) {
       return ossStore.createReadStream({
         Bucket: bucket,
-        Key: folder + fileKey
+        Key: fileKey
       }, options);
     },
     // Comment to documentation: Set options.ContentLength otherwise the
@@ -120,7 +120,7 @@ FS.Store.OSS = function(name, options) {
     remove: function(fileKey, callback) {
       ossStore.deleteObject({
         Bucket: bucket,
-        Key: folder + fileKey
+        Key: fileKey
       }, function(error) {
         callback(error, !error);
       });
