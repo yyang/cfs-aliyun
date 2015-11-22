@@ -2,7 +2,8 @@ Package.describe({
   name: 'iyyang:cfs-aliyun',
   version: '0.0.1',
   summary: 'Aliyun OSS storage adaptger for CollectionFS',
-  git: 'https://github.com/yyang/cfs-aliyun.git'
+  git: 'https://github.com/yyang/cfs-aliyun.git',
+  documentation: 'README.md'
 });
 
 Npm.depends({
@@ -19,9 +20,3 @@ Package.onUse(function(api) {
     ], 'server');
   api.addFiles('aliyun.client.js', 'client');
 });
-
-// Package.onTest(function(api) {
-//   api.use(['cfs:standard-packages', 'iyyang:cfs-aliyun', 'test-helpers', 'tinytest'], 'server');
-//   api.addFiles('tests/server-tests.js', 'server');
-//   api.addFiles('tests/client-tests.js', 'client');
-// });
