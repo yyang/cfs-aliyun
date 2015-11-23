@@ -1,4 +1,4 @@
-yyang:cfs-aliyun
+iyyang:cfs-aliyun
 =========================
 
 Meteor Package: Aliyun storage adaptor for [CollectionFS][collection-fs].
@@ -8,7 +8,7 @@ Meteor Package: Aliyun storage adaptor for [CollectionFS][collection-fs].
 ## Installation
 
 ```
-$ meteor add yyang:cfs-aliyun
+$ meteor add iyyang:cfs-aliyun
 ```
 
 ## Aliyun OSS Setup
