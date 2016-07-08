@@ -35,8 +35,7 @@ FS.Store.OSS = function(name, options) {
   var defaultAcl = options.ACL || 'private';
 
   var region = options.region || 'oss-cn-hangzhou';
-  var regionList = ['oss-cn-hangzhou', 'oss-cn-beijing', 'oss-cn-qingdao',
-                    'oss-cn-shenzhen', 'oss-cn-hongkong'];
+  var regionList = ['oss-cn-qingdao', 'oss-cn-beijing', 'oss-cn-hangzhou', 'oss-cn-shanghai', 'oss-cn-hongkong', 'oss-cn-shenzhen', 'oss-us-west-1', 'oss-ap-southeast-1'];
   if (regionList.indexOf(region) === -1) {
     throw new Error('FS.Store.OSS invalid region');
   }
