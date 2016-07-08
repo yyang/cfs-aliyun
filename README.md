@@ -44,8 +44,10 @@ Images = new FS.Collection('images', {
 
 ### Supported options
 
-* Supported `region`s: `'oss-cn-hangzhou'`, `'oss-cn-beijing'`, 
-  `'oss-cn-qingdao'`, `'oss-cn-shenzhen'`, `'oss-cn-hongkong'`
+* Supported `region`s: `'oss-cn-hangzhou'`, `'oss-cn-shanghai'`, 
+  `'oss-cn-beijing'`, `'oss-cn-qingdao'`, `'oss-cn-shenzhen'`,
+  `'oss-cn-hongkong'`, `'oss-us-east-1'`, `'oss-us-west-1'`, 
+  `'oss-ap-southeast-1'`
 * Supported `ACL`s: `'private'`, `'public-read'`, `'public-read-write'`
 
 ### Secure your Credential

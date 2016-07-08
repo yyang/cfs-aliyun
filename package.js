@@ -1,6 +1,6 @@
 Package.describe({
   name: 'iyyang:cfs-aliyun',
-  version: '0.1.0',
+  version: '0.1.1',
   summary: 'Aliyun OSS storage adaptger for CollectionFS',
   git: 'https://github.com/yyang/cfs-aliyun.git',
   documentation: 'README.md'

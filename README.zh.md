@@ -46,8 +46,10 @@ Images = new FS.Collection("images", {
 
 ### 支持的区域
 
-* 支持的 `region`: `'oss-cn-hangzhou'`, `'oss-cn-beijing'`, 
-  `'oss-cn-qingdao'`, `'oss-cn-shenzhen'`, `'oss-cn-hongkong'`
+* 支持的 `region`:  `'oss-cn-hangzhou'`, `'oss-cn-shanghai'`, 
+  `'oss-cn-beijing'`, `'oss-cn-qingdao'`, `'oss-cn-shenzhen'`,
+  `'oss-cn-hongkong'`, `'oss-us-east-1'`, `'oss-us-west-1'`, 
+  `'oss-ap-southeast-1'`
 * 支持的 `ACL`s: `'private'`, `'public-read'`, `'public-read-write'`
 
 ### 保护你的密钥
