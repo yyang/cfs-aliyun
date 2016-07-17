@@ -27,7 +27,7 @@ $ meteor add iyyang:cfs-aliyun
 ```js
 var imageStore = new FS.Store.OSS("images", {
   region: "oss-my-region", //可选, 默认为 'oss-cn-hangzhou'
-  internal: false, //可选, 如果使用阿里云 ECS 访问，可设置为true，使用内部路由
+  aliyunInternal: false, //可选, 如果使用阿里云 ECS 访问，可设置为true，使用内部路由
   bucket: "Bucket Name", //必须
   accessKeyId: "Access Key ID", //必须
   secretAccessKey: "Access Key Secret", //必须
@@ -79,7 +79,7 @@ Avatars = new FS.Collection('avatars', {
 ```js
 var avatarStoreLarge = new FS.Store.OSS('avatarsLarge', {
   region: 'oss-my-region',
-  internal: false,
+  aliyunInternal: false,
   bucket: 'avatars.large',
   accessKeyId: 'ACCESS-KEY-ID-HERE', 
   secretAccessKey: 'ACCESS-KEY-SECRET-HERE',
@@ -90,7 +90,7 @@ var avatarStoreLarge = new FS.Store.OSS('avatarsLarge', {
 
 var avatarStoreSmall = new FS.Store.OSS('avatarsSmall', {
   region: 'oss-my-region',
-  internal: false,
+  aliyunInternal: false,
   bucket: 'avatars.small',
   accessKeyId: 'ACCESS-KEY-ID-HERE', 
   secretAccessKey: 'ACCESS-KEY-SECRET-HERE', 

@@ -25,7 +25,7 @@ After performimg **Installation** and **Aliyun OSS Setup**, we may create
 ```js
 var imageStore = new FS.Store.OSS('images', {
   region: 'oss-my-region', //optional, default is 'oss-cn-hangzhou'
-  internal: false, //optional, set to true if access from Aliyun ECS
+  aliyunInternal: false, //optional, set to true if access from Aliyun ECS
   bucket: 'Bucket Name', //required
   accessKeyId: 'Access Key ID', //required
   secretAccessKey: 'Access Key Secret', //required
@@ -79,7 +79,7 @@ Avatars = new FS.Collection('avatars', {
 ```js
 var avatarStoreLarge = new FS.Store.OSS('avatarsLarge', {
   region: 'oss-my-region',
-  internal: false,
+  aliyunInternal: false,
   bucket: 'avatars.large',
   accessKeyId: 'ACCESS-KEY-ID-HERE', 
   secretAccessKey: 'ACCESS-KEY-SECRET-HERE',
@@ -90,7 +90,7 @@ var avatarStoreLarge = new FS.Store.OSS('avatarsLarge', {
 
 var avatarStoreSmall = new FS.Store.OSS('avatarsSmall', {
   region: 'oss-my-region',
-  internal: false,
+  aliyunInternal: false,
   bucket: 'avatars.small',
   accessKeyId: 'ACCESS-KEY-ID-HERE', 
   secretAccessKey: 'ACCESS-KEY-SECRET-HERE', 

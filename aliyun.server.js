@@ -42,8 +42,8 @@ FS.Store.OSS = function(name, options) {
     throw new Error('FS.Store.OSS invalid region');
   }
 
-  var endpoint = 'http://' + region + (options.internal ? '-internal' : '') +
-                 '.aliyuncs.com';
+  var endpoint = 'http://' + region +
+                 (options.aliyunInternal ? '-internal' : '') + '.aliyuncs.com';
 
   var serviceParams = FS.Utility.extend({
     accessKeyId: null, // Required
